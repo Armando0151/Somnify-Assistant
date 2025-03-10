@@ -25,32 +25,28 @@ const generateBotResponse = async (incomingMessageDiv) => {
   const messageElement = incomingMessageDiv.querySelector(".message-text"); // Sélectionne l'élément où la réponse du bot sera affichée
   const currentHour = new Date().getHours(); // Récupère l'heure actuelle
 
-const requestOptions = {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    contents: [{
-      parts: [
-        { 
-          text: `Tu es Somnify, un coach virtuel spécialisé dans l'amélioration de la qualité du sommeil. 
-                Ton rôle est d'aider les utilisateurs à trouver des solutions pour mieux dormir et avoir des journées énergiques. 
-                Tu dois répondre uniquement aux questions liées au sommeil de manière professionnelle, polie et humaine. 
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [{
+        parts: [
+          { 
+            text: `Tu es Somnify, un coach virtuel spécialisé dans l'amélioration de la qualité du sommeil. 
+                  Ton rôle est d'aider les utilisateurs à trouver des solutions pour mieux dormir et avoir des journées énergiques. 
+                  Tu dois répondre uniquement aux questions liées au sommeil de manière professionnelle, polie et humaine. 
 
-                Règles de comportement :
-                1. Si l'utilisateur te pose une question hors sujet, explique-lui gentiment que tu es spécialisé dans le sommeil
-                  et propose-lui de recentrer la conversation sur ce sujet.
-                2. Si l'utilisateur te remercie ou dit 'à bientôt', considère que la conversation est terminée et réponds par une phrase
-                  de conclusion bienveillante, adaptée à l'heure actuelle (${currentHour}h) :
-                  - Matin (5h-11h) : "Bonjour ! À bientôt"
-                  - Après-midi (12h-17h) : "Bonne journée"
-                  - Soir (18h-21h) : "Bonsoir"
-                  - Nuit (22h-4h) : "Bonne nuit"
-                3. Si l'utilisateur te pose une question ambiguë ou demande des clarifications, n'hésite pas à lui poser des questions
-                  pour mieux comprendre son besoin.
-                4. Utilise un ton naturel et conversationnel, comme si tu parlais à un ami, tout en restant informatif et bienveillant.
-                5. Garde en mémoire le contexte de la conversation pour fournir des réponses cohérentes et pertinentes.
-                6. Ne salue que lors du premier message ou de la conclusion. Garde le ton naturel comme un ami bienveillant,
-                  même dans les conversations longues.`
+                  Règles de comportement :
+                  1. Fournis toujours des conseils clairs et utiles en premier. Ne pose des questions que si tu as besoin de clarifier la situation de l'utilisateur.
+                  2. Si l'utilisateur te pose une question hors sujet, explique-lui gentiment que tu es spécialisé dans le sommeil
+                    et propose-lui de recentrer la conversation sur ce sujet.
+                  3. Si l'utilisateur te remercie ou dit 'à bientôt', conclus avec une phrase bienveillante adaptée à l'heure actuelle (${currentHour}h) :
+                    - Matin (5h-11h) : "Bonjour ! À bientôt"
+                    - Après-midi (12h-17h) : "Bonne journée"
+                    - Soir (18h-21h) : "Bonsoir"
+                    - Nuit (22h-4h) : "Bonne nuit"
+                  4. Utilise un ton naturel et conversationnel, comme si tu parlais à un ami, tout en restant informatif et bienveillant.
+                  5. Garde en mémoire le contexte de la conversation pour fournir des réponses cohérentes et pertinentes.`
           },
           { 
             text: userData.message
@@ -68,31 +64,74 @@ const requestOptions = {
     // Vérifie si la réponse de l'API est valide
     if (!response.ok) throw new Error(data.error.message); // Lance une erreur si la réponse n'est pas OK
 
-    const MAX_LENGTH = 500; // Longueur maximale du texte
+    // Nettoyage du texte reçu de l'API
+    const rawText = data.candidates[0].content.parts[0].text;
 
-  // Récupère le texte brut ou une chaîne vide si absent
-  const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    // Étape 1 : Gérer les mots en gras (**gras**) et en italique (*italique*)
+    const formattedText = rawText
+      .replace(/\*\*(.*?)\*\*/g, '𝐁𝐎𝐋𝐃:$1:𝐁𝐎𝐋𝐃') // Marque les mots en gras
+      .replace(/\*(.*?)\*/g, '𝐼𝑇𝐴𝐿𝐼𝐶:$1:𝐼𝑇𝐴𝐿𝐼𝐶'); // Marque les mots en italique
 
-  if (!rawText) {
-    console.error('Aucun texte trouvé dans la réponse de l\'API');
-    return;
+    // Étape 2 : Gérer les listes (à puces ou numérotées)
+    let lines = formattedText.split('\n');
+
+    const processedLines = lines.map(line => {
+      // Détection séparée des puces et listes numérotées
+      const isBulletList = /^(\s*[-*•])\s+/.test(line);
+      const isNumberedList = /^(\s*\d+\.)\s+/.test(line);
+
+    if (isBulletList) {
+      // Formatage des listes à puces avec indentation
+      return '  • ' + line.replace(/^(\s*[-*•])\s+/, '');
+    } else if (isNumberedList) {
+      // Formatage des listes numérotées avec conservation des nombres
+      return '  ' + line.replace(/^(\s*\d+\.)\s+/, '$1 ');
+    } else {
+      // Lignes normales
+      return line;
+    }
+  });
+
+  // Étape 3 : Nettoyage final
+  let cleanText = processedLines.join('\n')
+    .replace(/\n{3,}/g, '\n\n')  // Max 2 sauts de ligne consécutifs
+    .replace(/ +\n/g, '\n')      // Supprimer espaces avant saut de ligne
+    .trim();
+
+  // Étape 4 : Appliquer le gras et l'italique avec Unicode
+  cleanText = cleanText
+    .replace(/𝐁𝐎𝐋𝐃:(.*?):𝐁𝐎𝐋𝐃/g, (_, text) => toBold(text)) // Appliquer le gras
+    .replace(/𝐼𝑇𝐴𝐿𝐼𝐶:(.*?):𝐼𝑇𝐴𝐿𝐼𝐶/g, (_, text) => toItalic(text)); // Appliquer l'italique
+
+  // Fonction pour convertir en gras (Unicode)
+  function toBold(text) {
+    const boldMap = {
+      a: '𝗮', b: '𝗯', c: '𝗰', d: '𝗱', e: '𝗲', f: '𝗳', g: '𝗴', h: '𝗵', i: '𝗶', j: '𝗷',
+      k: '𝗸', l: '𝗹', m: '𝗺', n: '𝗻', o: '𝗼', p: '𝗽', q: '𝗾', r: '𝗿', s: '𝘀', t: '𝘁',
+      u: '𝘂', v: '𝘃', w: '𝘄', x: '𝘅', y: '𝘆', z: '𝘇',
+      A: '𝗔', B: '𝗕', C: '𝗖', D: '𝗗', E: '𝗘', F: '𝗙', G: '𝗚', H: '𝗛', I: '𝗜', J: '𝗝',
+      K: '𝗞', L: '𝗟', M: '𝗠', N: '𝗡', O: '𝗢', P: '𝗣', Q: '𝗤', R: '𝗥', S: '𝗦', T: '𝗧',
+      U: '𝗨', V: '𝗩', W: '𝗪', X: '𝗫', Y: '𝗬', Z: '𝗭',
+      0: '𝟬', 1: '𝟭', 2: '𝟮', 3: '𝟯', 4: '𝟰', 5: '𝟱', 6: '𝟲', 7: '𝟳', 8: '𝟴', 9: '𝟵'
+    };
+    return text.split('').map(char => boldMap[char] || char).join('');
   }
 
-  // Nettoyage du texte
-  const cleanText = rawText
-    .replace(/<[^>]+>/g, '') // Supprime les balises HTML
-    .replace(/\r\n?/g, '\n') // Normalise les sauts de ligne
-    .replace(/\*\*|\*|\n+/g, match => match === '\n' ? '\n' : '') // Supprime les astérisques et nettoie les sauts de ligne
-    .replace(/\s+/g, ' ') // Remplace les espaces multiples par un seul espace
-    .trim(); // Supprime les espaces inutiles au début et à la fin
+  // Fonction pour convertir en italique (Unicode)
+  function toItalic(text) {
+    const italicMap = {
+      a: '𝘢', b: '𝘣', c: '𝘤', d: '𝘥', e: '𝘦', f: '𝘧', g: '𝘨', h: '𝘩', i: '𝘪', j: '𝘫',
+      k: '𝘬', l: '𝘭', m: '𝘮', n: '𝘯', o: '𝘰', p: '𝘱', q: '𝘲', r: '𝘳', s: '𝘴', t: '𝘵',
+      u: '𝘶', v: '𝘷', w: '𝘸', x: '𝘹', y: '𝘺', z: '𝘻',
+      A: '𝘈', B: '𝘉', C: '𝘊', D: '𝘋', E: '𝘌', F: '𝘍', G: '𝘎', H: '𝘏', I: '𝘐', J: '𝘑',
+      K: '𝘒', L: '𝘓', M: '𝘔', N: '𝘕', O: '𝘖', P: '𝘗', Q: '𝘘', R: '𝘙', S: '𝘚', T: '𝘛',
+      U: '𝘜', V: '𝘝', W: '𝘞', X: '𝘟', Y: '𝘠', Z: '𝘡'
+    };
+    return text.split('').map(char => italicMap[char] || char).join('');
+  }
 
-  // Tronque le texte et ajoute des ellipses si nécessaire
-  const truncatedText = cleanText.length > MAX_LENGTH 
-    ? cleanText.slice(0, MAX_LENGTH) + '...' 
-    : cleanText;
-
-  // Affichage du texte nettoyé dans l'élément de message
-  messageElement.textContent = truncatedText;
+  // Affichage dans l'élément
+  messageElement.innerText = cleanText;
   } catch (error) {
     // Gestion des erreurs
     console.log(error); // Affiche l'erreur dans la console
