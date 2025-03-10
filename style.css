@@ -1,0 +1,348 @@
+/* Importation de la police Google Fonts "Inter" avec différentes épaisseurs et styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap');
+
+/* Réinitialisation des styles par défaut pour tous les éléments */
+* {
+  margin: 0; /* Supprime les marges par défaut */
+  padding: 0; /* Supprime les paddings par défaut */
+  box-sizing: border-box; /* Inclut le padding et la bordure dans la largeur et la hauteur */
+  font-family: "Inter", serif; /* Définit la police par défaut */
+}
+
+/* Styles de base pour le corps de la page */
+body {
+  display: flex; /* Utilise Flexbox pour centrer le contenu */
+  align-items: center; /* Centre verticalement */
+  justify-content: center; /* Centre horizontalement */
+  min-height: 100vh; /* Hauteur minimale de la vue (viewport height) */
+  background: linear-gradient(#EEEEFF, #C8C7FF); /* Dégradé de fond */
+}
+
+/* Conteneur principal du chatbot */
+.chatbot-popup {
+  position: relative; /* Position relative pour les éléments enfants */
+  width: 1100px; /* Largeur du chatbot */
+  background: #fff; /* Couleur de fond */
+  overflow: hidden; /* Cache tout contenu qui dépasse */
+  border-radius: 15px; /* Bordures arrondies */
+  box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1), 0 32px 64px -48px rgba(0, 0, 0, 0.5); /* Ombre portée */
+}
+
+/* En-tête du chatbot */
+.chat-header {
+  display: flex; /* Utilise Flexbox pour aligner les éléments */
+  align-items: center; /* Centre verticalement les éléments */
+  background: #5350C4; /* Couleur de fond */
+  padding: 15px 22px; /* Espacement interne */
+  justify-content: space-between; /* Espace les éléments sur les côtés */
+}
+
+/* Conteneur des informations de l'en-tête */
+.chat-header .header-info {
+  display: flex; /* Utilise Flexbox pour aligner les éléments */
+  gap: 10px; /* Espacement entre les éléments */
+  align-items: center; /* Centre verticalement les éléments */
+}
+
+/* Logo du chatbot */
+.header-info .chatbot-logo {
+  height: 35px; /* Hauteur du logo */
+  width: 35px; /* Largeur du logo */
+  padding: 6px; /* Espacement interne */
+  fill: #5350C4; /* Couleur de remplissage du SVG */
+  flex-shrink: 0; /* Empêche le logo de rétrécir */
+  background: #fff; /* Couleur de fond */
+  border-radius: 50%; /* Forme circulaire */
+}
+
+/* Texte du logo */
+.header-info .logo-text {
+  color: #fff; /* Couleur du texte */
+  font-size: 1.31rem; /* Taille de la police */
+  font-weight: 600; /* Épaisseur de la police */
+}
+
+/* Bouton pour fermer le chatbot */
+.chat-header #close-chatbot {
+  border: none; /* Supprime la bordure */
+  color: #fff; /* Couleur du texte */
+  height: 40px; /* Hauteur du bouton */
+  width: 40px; /* Largeur du bouton */
+  font-size: 1.9rem; /* Taille de la police */
+  margin-right: -10px; /* Ajustement de la marge */
+  padding-top: 2px; /* Ajustement du padding */
+  cursor: pointer; /* Curseur en forme de main */
+  border-radius: 50%; /* Forme circulaire */
+  background: none; /* Pas de fond */
+  transition: 0.2s ease; /* Transition fluide */
+}
+
+/* Effet au survol du bouton de fermeture */
+.chat-header #close-chatbot:hover {
+  background: #3d39ac; /* Changement de couleur de fond */
+}
+
+/* Corps du chatbot (zone des messages) */
+.chat-body {
+  padding: 25px 22px; /* Espacement interne */
+  display: flex; /* Utilise Flexbox pour aligner les messages */
+  gap: 20px; /* Espacement entre les messages */
+  height: 460px; /* Hauteur fixe */
+  margin-bottom: 82px; /* Marge en bas pour le formulaire */
+  overflow-y: auto; /* Défilement vertical si nécessaire */
+  flex-direction: column; /* Alignement vertical des messages */
+}
+
+/* Personnalisation de la barre de défilement */
+::-webkit-scrollbar {
+  width: 6px; /* Largeur de la barre de défilement */
+}
+
+/* Piste de la barre de défilement */
+::-webkit-scrollbar-track {
+  background: transparent; /* Fond transparent */
+}
+
+/* Curseur de la barre de défilement */
+::-webkit-scrollbar-thumb {
+  background: #ccccf5; /* Couleur du curseur */
+  border-radius: 10px; /* Bordures arrondies */
+}
+
+/* Conteneur d'un message */
+.chat-body .message {
+  display: flex; /* Utilise Flexbox pour aligner les éléments */
+  gap: 11px; /* Espacement entre les éléments */
+  align-items: center; /* Centre verticalement les éléments */
+}
+
+/* Avatar du bot dans un message */
+.chat-body .bot-message .bot-avatar {
+  height: 35px; /* Hauteur de l'avatar */
+  width: 35px; /* Largeur de l'avatar */
+  padding: 6px; /* Espacement interne */
+  fill: #fff; /* Couleur de remplissage du SVG */
+  flex-shrink: 0; /* Empêche l'avatar de rétrécir */
+  margin-bottom: 2px; /* Marge en bas */
+  align-self: flex-end; /* Alignement en bas */
+  background: #5350C4; /* Couleur de fond */
+  border-radius: 50%; /* Forme circulaire */
+}
+
+/* Message de l'utilisateur */
+.chat-body .user-message {
+  flex-direction: column; /* Alignement vertical des éléments */
+  align-items: flex-end; /* Alignement à droite */
+}
+
+/* Texte du message */
+.chat-body .message .message-text {
+  padding: 12px 16px; /* Espacement interne */
+  max-width: 75%; /* Largeur maximale */
+  font-size: 0.9rem; /* Taille de la police */
+  background: #F2F2FF; /* Couleur de fond */
+}
+
+/* Texte du message du bot en mode "pensée" */
+.chat-body .bot-message.thinking .message-text {
+  padding: 2px 16px; /* Espacement interne réduit */
+}
+
+/* Texte du message du bot */
+.chat-body .bot-message .message-text {
+  background: #F2F2FF; /* Couleur de fond */
+  border-radius: 13px 13px 13px 3px; /* Bordures arrondies */
+}
+
+/* Texte du message de l'utilisateur */
+.chat-body .user-message .message-text {
+  color: #fff; /* Couleur du texte */
+  background: #5350C4; /* Couleur de fond */
+  border-radius: 13px 13px 3px 13px; /* Bordures arrondies */
+}
+
+/* Pièce jointe dans un message utilisateur */
+.chat-body .user-message .attachment {
+  width: 50%; /* Largeur de la pièce jointe */
+  margin-top: -7px; /* Ajustement de la marge */
+  border-radius: 13px 13px 3px 13px; /* Bordures arrondies */
+}
+
+/* Indicateur de "pensée" du bot */
+.chat-body .bot-message .thinking-indicator {
+  display: flex; /* Utilise Flexbox pour aligner les points */
+  gap: 4px; /* Espacement entre les points */
+  padding-block: 15px; /* Espacement vertical */
+}
+
+/* Points de l'indicateur de "pensée" */
+.chat-body .bot-message .thinking-indicator .dot {
+  height: 7px; /* Hauteur du point */
+  width: 7px; /* Largeur du point */
+  opacity: 0.7; /* Opacité */
+  border-radius: 50%; /* Forme circulaire */
+  background: #6F6BC2; /* Couleur de fond */
+  animation: dotPulse 1.8s ease-in-out infinite; /* Animation */
+}
+
+/* Délai d'animation pour chaque point */
+.chat-body .bot-message .thinking-indicator .dot:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.chat-body .bot-message .thinking-indicator .dot:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.chat-body .bot-message .thinking-indicator .dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Animation des points de l'indicateur de "pensée" */
+@keyframes dotPulse {
+  0%, 44% {
+    transform: translateY(0); /* Position initiale */
+  }
+
+  28% {
+    opacity: 0.4; /* Réduction de l'opacité */
+    transform: translateY(-4px); /* Déplacement vers le haut */
+  }
+
+  44% {
+    opacity: 0.2; /* Réduction de l'opacité */
+  }
+}
+
+/* Pied de page du chatbot (zone de saisie) */
+.chat-footer {
+  position: absolute; /* Position absolue pour le positionnement */
+  bottom: 0; /* Alignement en bas */
+  width: 100%; /* Largeur de 100% */
+  background: #fff; /* Couleur de fond */
+  padding: 15px 22px 20px; /* Espacement interne */
+}
+
+/* Formulaire de saisie du message */
+.chat-footer .chat-form {
+  display: flex; /* Utilise Flexbox pour aligner les éléments */
+  align-items: center; /* Centre verticalement les éléments */
+  background: #fff; /* Couleur de fond */
+  border-radius: 32px; /* Bordures arrondies */
+  outline: 1px solid #CCCCE5; /* Bordure */
+}
+
+/* Effet lorsque le formulaire est en focus */
+.chat-footer .chat-form:focus-within {
+  outline: 2px solid #5350C4; /* Bordure plus épaisse */
+}
+
+/* Champ de saisie du message */
+.chat-form .message-input {
+  border: none; /* Supprime la bordure */
+  outline: none; /* Supprime le contour */
+  height: 47px; /* Hauteur du champ */
+  width: 100%; /* Largeur de 100% */
+  resize: none; /* Empêche le redimensionnement */
+  font-size: 0.95rem; /* Taille de la police */
+  padding: 14px 0 13px 18px; /* Espacement interne */
+  border-radius: inherit; /* Hérite des bordures arrondies */
+}
+
+/* Conteneur des boutons de contrôle */
+.chat-form .chat-controls {
+  display: flex; /* Utilise Flexbox pour aligner les boutons */
+  height: 47px; /* Hauteur du conteneur */
+  gap: 3px; /* Espacement entre les boutons */
+  align-items: center; /* Centre verticalement les boutons */
+  align-self: flex-end; /* Alignement en bas */
+  padding-right: 6px; /* Espacement interne */
+}
+
+/* Boutons de contrôle */
+.chat-form .chat-controls button {
+  height: 35px; /* Hauteur du bouton */
+  width: 35px; /* Largeur du bouton */
+  border: none; /* Supprime la bordure */
+  font-size: 1.15rem; /* Taille de la police */
+  cursor: pointer; /* Curseur en forme de main */
+  color: #706DB0; /* Couleur du texte */
+  background: none; /* Pas de fond */
+  border-radius: 50%; /* Forme circulaire */
+  transition: 0.2s ease; /* Transition fluide */
+}
+
+/* Bouton d'envoi du message */
+.chat-form .chat-controls #send-message {
+  color: #fff; /* Couleur du texte */
+  display: none; /* Masqué par défaut */
+  background: #5350C4; /* Couleur de fond */
+}
+
+/* Affichage du bouton d'envoi lorsque le champ est valide */
+.chat-form .message-input:valid~.chat-controls #send-message {
+  display: block; /* Affiche le bouton */
+}
+
+/* Effet au survol du bouton d'envoi */
+.chat-form .chat-controls #send-message:hover {
+  background: #3d39ac; /* Changement de couleur de fond */
+}
+
+/* Effet au survol des autres boutons */
+.chat-form .chat-controls button:hover {
+  background: #F1F1FF; /* Changement de couleur de fond */
+}
+
+/* Nouvelle règle pour cacher le chatbot */
+.chatbot-popup.hidden {
+  display: none; /* Cache le chatbot */
+}
+
+.auth-form {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1), 0 32px 64px -48px rgba(0, 0, 0, 0.5);
+  width: 400px;
+  text-align: center;
+}
+
+.auth-form h2 {
+  margin-bottom: 20px;
+  color: #5350C4;
+}
+
+.input-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #5350C4;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #CCCCE5;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.auth-button {
+  background: #5350C4;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.auth-button:hover {
+  background: #3d39ac;
+}
