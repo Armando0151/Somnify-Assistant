@@ -346,3 +346,46 @@ body {
 .auth-button:hover {
   background: #3d39ac;
 }
+
+/* Pour les écrans de petite taille (smartphones) */
+@media (max-width: 768px) {
+  .chatbot-popup {
+    width: 90%; /* Réduire la largeur du chatbot */
+    border-radius: 10px; /* Bordures plus arrondies */
+  }
+
+  .chat-body {
+    height: 300px; /* Réduire la hauteur de la zone de chat */
+    padding: 15px; /* Réduire l'espacement interne */
+  }
+
+  .chat-footer {
+    padding: 10px; /* Réduire l'espacement interne */
+  }
+
+  .message-input {
+    height: 40px; /* Réduire la hauteur du champ de saisie */
+    font-size: 0.9rem; /* Réduire la taille de la police */
+  }
+
+  .chat-controls button {
+    height: 30px; /* Réduire la taille des boutons */
+    width: 30px;
+    font-size: 1rem; /* Réduire la taille de la police */
+  }
+}
+
+/* Pour les écrans de taille moyenne (tablettes) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .chatbot-popup {
+    width: 80%; /* Réduire la largeur du chatbot */
+  }
+
+  .chat-body {
+    height: 400px; /* Ajuster la hauteur de la zone de chat */
+  }
+
+  .message-input {
+    height: 45px; /* Ajuster la hauteur du champ de saisie */
+  }
+}
