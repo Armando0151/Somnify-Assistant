@@ -1,4 +1,4 @@
-// Sélection des éléments du DOM (Document Object Model)
+// Sélection des éléments du DOM
 const chatBody = document.querySelector(".chat-body"); // Conteneur du chat où les messages sont affichés
 const messageInput = document.querySelector(".message-input"); // Champ de saisie pour le message de l'utilisateur
 const sendMessageButton = document.querySelector("#send-message"); // Bouton pour envoyer le message
@@ -190,3 +190,26 @@ messageInput.addEventListener("keydown", (e) => {
 
 // Gestion du clic sur le bouton d'envoi
 sendMessageButton.addEventListener("click", (e) => handleOutgoingMessage(e)); // Appelle la fonction pour gérer l'envoi du message
+
+// Nouveau code pour gérer l'ouverture et la fermeture du chatbot
+const openChatbotButton = document.querySelector("#open-chatbot"); // Bouton pour ouvrir le chatbot
+const closeChatbotButton = document.querySelector("#close-chatbot"); // Bouton pour fermer le chatbot
+const chatbotPopup = document.querySelector(".chatbot-popup"); // Conteneur du chatbot
+
+// Fonction pour ouvrir la fenêtre du chatbot
+const openChatbot = () => {
+  chatbotPopup.classList.remove("hidden"); // Supprime la classe "hidden" pour afficher le chatbot
+  openChatbotButton.classList.add("hidden"); // Cache le bouton d'ouverture avec une animation
+};
+
+// Fonction pour fermer la fenêtre du chatbot
+const closeChatbot = () => {
+  chatbotPopup.classList.add("hidden"); // Ajoute la classe "hidden" pour cacher le chatbot avec une animation
+  setTimeout(() => {
+    openChatbotButton.classList.remove("hidden"); // Affiche le bouton d'ouverture après la fin de l'animation
+  }, 300); // Délai correspondant à la durée de l'animation (0.3s)
+};
+
+// Gestion des événements de clic
+openChatbotButton.addEventListener("click", openChatbot); // Ouvre le chatbot lors du clic
+closeChatbotButton.addEventListener("click", closeChatbot); // Ferme le chatbot lors du clic
