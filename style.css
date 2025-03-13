@@ -26,6 +26,21 @@ body {
   overflow: hidden; /* Cache tout contenu qui dépasse */
   border-radius: 15px; /* Bordures arrondies */
   box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1), 0 32px 64px -48px rgba(0, 0, 0, 0.5); /* Ombre portée */
+  transition: opacity 0.3s ease, transform 0.3s ease; /* Transition pour l'opacité et la transformation */
+}
+
+/* État caché du chatbot */
+.chatbot-popup.hidden {
+  opacity: 0; /* Rendre le chatbot transparent */
+  transform: translateY(20px); /* Déplacer légèrement vers le bas */
+  pointer-events: none; /* Désactiver les interactions */
+}
+
+/* État visible du chatbot */
+.chatbot-popup:not(.hidden) {
+  opacity: 1; /* Rendre le chatbot visible */
+  transform: translateY(0); /* Remettre à la position d'origine */
+  pointer-events: auto; /* Activer les interactions */
 }
 
 /* En-tête du chatbot */
@@ -294,57 +309,41 @@ body {
   background: #F1F1FF; /* Changement de couleur de fond */
 }
 
-/* Nouvelle règle pour cacher le chatbot */
-.chatbot-popup.hidden {
-  display: none; /* Cache le chatbot */
+/* Style pour le bouton d'ouverture du chatbot */
+#open-chatbot {
+  display: block; /* Affiche le bouton par défaut */
+  position: fixed; /* Position fixe pour rester en place lors du défilement */
+  bottom: 20px; /* Position en bas */
+  right: 20px; /* Position à droite */
+  background: #5350C4; /* Couleur de fond */
+  color: white; /* Couleur du texte */
+  border: none; /* Supprime la bordure */
+  border-radius: 50%; /* Forme circulaire */
+  width: 50px; /* Largeur */
+  height: 50px; /* Hauteur */
+  font-size: 24px; /* Taille de la police */
+  cursor: pointer; /* Curseur en forme de main */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Ombre portée */
+  transition: opacity 0.3s ease, transform 0.3s ease; /* Transition pour l'opacité et la transformation */
 }
 
-.auth-form {
-  background: #fff;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 0 128px 0 rgba(0, 0, 0, 0.1), 0 32px 64px -48px rgba(0, 0, 0, 0.5);
-  width: 400px;
-  text-align: center;
+/* État caché du bouton d'ouverture */
+#open-chatbot.hidden {
+  opacity: 0; /* Rendre le bouton transparent */
+  transform: translateY(20px); /* Déplacer légèrement vers le bas */
+  pointer-events: none; /* Désactiver les interactions */
 }
 
-.auth-form h2 {
-  margin-bottom: 20px;
-  color: #5350C4;
+/* État visible du bouton d'ouverture */
+#open-chatbot:not(.hidden) {
+  opacity: 1; /* Rendre le bouton visible */
+  transform: translateY(0); /* Remettre à la position d'origine */
+  pointer-events: auto; /* Activer les interactions */
 }
 
-.input-group {
-  margin-bottom: 15px;
-  text-align: left;
-}
-
-.input-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #5350C4;
-}
-
-.input-group input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #CCCCE5;
-  border-radius: 8px;
-  font-size: 1rem;
-}
-
-.auth-button {
-  background: #5350C4;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  margin-top: 10px;
-}
-
-.auth-button:hover {
-  background: #3d39ac;
+/* Effet au survol du bouton d'ouverture */
+#open-chatbot:hover {
+  background: #3d39ac; /* Changement de couleur de fond */
 }
 
 /* Pour les écrans de petite taille (smartphones) */
